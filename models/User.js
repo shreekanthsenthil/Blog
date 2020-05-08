@@ -3,9 +3,12 @@ const userCollection = require('../db').db().collection("users")
 const validator = require('validator')
 const md5 = require('md5')
 
-let User = function(data) {
+let User = function(data, getAvatar) {
     this.data = data
     this.errors = []
+    if (getAvatar == undefined) {getAvatar = false}
+    if(getAvatar) {this.getAvatar()}
+    
 }
 
 //Validate the fields
@@ -90,7 +93,30 @@ User.prototype.login = function() {
 
 User.prototype.getAvatar = function() {
     this.avatar = `https:gravatar.com/avatar/${md5(this.data.email)}?s=128`
-    console.log('1'+this.avatar);
+}
+
+User.findByUsername = function(username) {
+    return new Promise(function(resolve, reject) {
+        if(typeof(username) != 'string') {
+            reject()
+            return
+        }
+        userCollection.findOne({username: username}).then(function(userDoc) {
+            if(userDoc) {
+                userDoc = new User(userDoc, true)
+                userDoc = {
+                    _id: userDoc.data._id,
+                    username: userDoc.data.username,
+                    avatar: userDoc.avatar
+                }
+                resolve(userDoc)
+            } else {
+                reject()
+            }
+        }).catch(function() {
+            reject()
+        })
+    })
 }
 
 module.exports = User
