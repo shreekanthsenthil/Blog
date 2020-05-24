@@ -96,6 +96,7 @@ exports.profilePostsScreen = function(req, res) {
     //post by a certain author id
     Post.findByAuthorId(req.profileUser._id).then(function(posts) {
         res.render('profile', {
+            title: req.profileUser.username,
             posts: posts,
             profileUsername: req.profileUser.username,
             profileAvatar: req.profileUser.avatar,
