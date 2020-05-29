@@ -5,6 +5,7 @@ export default class Search {
     // Select DOM elements, and keep track of  any useful data
     constructor() {
         this.injectHTML()
+        this._csrf = document.querySelector('[name="_csrf"').value
         this.heraderSearchIcon = document.querySelector('.header-search-icon')
         this.overlay = document.querySelector('.search-overlay')
         this.closeIcon = document.querySelector('.close-live-search')
@@ -49,7 +50,7 @@ export default class Search {
     }
 
     sendRequest() {
-        axios.post('/search', {searchTerm: this.inputField.value}).then((response) => {
+        axios.post('/search', {_csrf:this._csrf, searchTerm: this.inputField.value}).then((response) => {
           this.renderResultsHTML(response.data)
         }).catch((e) => {
             console.log(e)
