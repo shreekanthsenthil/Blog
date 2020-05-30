@@ -1,7 +1,7 @@
 # Blog
 
 ### View Blog:
-[blog.shreekanth.me](blog.shreekanth.me)
+[blog.shreekanth.me](http://blog.shreekanth.me/)
 
 Build using Node.js, Express and MongoDB.
 
