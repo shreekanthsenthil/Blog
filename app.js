@@ -7,6 +7,11 @@ const app = express()
 const sanitizeHTML = require('sanitize-html')
 const csrf = require('csurf')
 
+app.use(express.urlencoded({extended: false}))
+app.use(express.json())
+
+app.use('/api', require('./router-api'))
+
 let sessionOptions = session({
     secret: "Javascript is soooooooooo cooool",
     store: new MongoStore({client: require('./db')}),
@@ -39,9 +44,6 @@ app.use(function(req, res, next) {
     res.locals.user = req.session.user
     next()
 })
-
-app.use(express.urlencoded({extended: false}))
-app.use(express.json())
 
 app.use(express.static('public'))
 app.set('views', 'views')
